@@ -65,14 +65,13 @@
   <script>
     const grid = document.getElementById('game-container');
 
-    // Fetch list of games from SteamSpy
-    fetch('https://steamspy.com/api.php?request=all')
+    fetch('/api/steamspy')
       .then(res => res.json())
       .then(allGames => {
         const sorted = Object.values(allGames)
           .filter(g => g.positive > 0 && g.owners !== '0 .. 0')
           .sort((a, b) => b.release_date - a.release_date)
-          .slice(0, 10); // Show top 10 newest
+          .slice(0, 10); // Top 10 newest
 
         sorted.forEach(game => fetchAndDisplayGame(game.appid, game.name));
       })
