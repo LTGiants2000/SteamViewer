@@ -113,3 +113,30 @@ img:hover {
   margin: 0 auto 10px;
   display: block;
 }
+
+.logo-text {
+  font-size: 2.2rem;
+  margin: 10px 0 0;
+  color: #f29c38;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.tagline {
+  font-size: 1rem;
+  color: #f29c38;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.sub-description {
+  font-size: 0.95rem;
+  color: #c7d5e0;
+  text-align: center;
+  margin-top: 10px;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}
