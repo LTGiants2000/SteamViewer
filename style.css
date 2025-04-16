@@ -1,5 +1,5 @@
 :root {
-  --background: #1b2838;
+  --background: #152e51;
   --container: #2a475e;
   --text-light: #c7d5e0;
   --text-muted: #a4b0be;
@@ -86,4 +86,30 @@ img:hover {
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
   display: none;
   z-index: 10;
+}
+
+.site-header {
+  text-align: center;
+  padding: 30px 0 10px;
+  background-color: var(--container);
+  border-bottom: 2px solid rgba(255,255,255,0.05);
+  margin-bottom: 30px;
+}
+
+.site-header h1 {
+  font-size: 2.4rem;
+  margin: 0;
+  color: var(--highlight);
+}
+
+.site-header .tagline {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin: 10px 0 0;
+}
+
+.site-logo {
+  max-width: 300px;
+  margin: 0 auto 10px;
+  display: block;
 }
