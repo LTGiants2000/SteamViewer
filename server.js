@@ -8,10 +8,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname)));
 
-// Scrape Steam search page for latest games
 app.get('/api/latest-games', async (req, res) => {
+  const start = parseInt(req.query.start || '0');
   try {
-    const response = await fetch('https://store.steampowered.com/search/?sort_by=Released_DESC&untags=12095&category1=998&os=win&supportedlang=english&ndl=1');
+    const response = await fetch(`https://store.steampowered.com/search/?sort_by=Released_DESC&untags=12095&category1=998&os=win&supportedlang=english&ndl=1&start=${start}`);
     const html = await response.text();
     const $ = cheerio.load(html);
     const games = [];
@@ -25,7 +25,7 @@ app.get('/api/latest-games', async (req, res) => {
       }
     });
 
-    res.json(games.slice(0, 20)); // limit to top 20
+    res.json(games);
   } catch (err) {
     res.status(500).json({ error: 'Failed to scrape Steam search page' });
   }

@@ -1,18 +1,27 @@
-// script.js
 const grid = document.getElementById('game-container');
-const searchInput = document.getElementById('search-input');
-const genreSelect = document.getElementById('genre-select');
+let startIndex = 0;
+let loading = false;
+const pageSize = 20;
 
-// Fetch search page results from backend scraper
-function fetchSteamGames() {
-  fetch('/api/latest-games')
+// Auto-load on scroll
+window.addEventListener('scroll', () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
+    loadMoreGames();
+  }
+});
+
+function loadMoreGames() {
+  loading = true;
+  fetch(`/api/latest-games?start=${startIndex}`)
     .then(res => res.json())
     .then(games => {
-      grid.innerHTML = ''; // Clear previous results
       games.forEach(game => fetchAndDisplayGame(game.appid, game.title));
+      startIndex += pageSize;
+      loading = false;
     })
     .catch(err => {
       console.error("Failed to load game list:", err);
+      loading = false;
     });
 }
 
@@ -22,12 +31,6 @@ function fetchAndDisplayGame(appId, gameName) {
     .then(data => {
       if (!data[appId]?.success) return;
       const gameData = data[appId].data;
-
-      // Optional: genre filter
-      const selectedGenre = genreSelect.value;
-      if (selectedGenre && !gameData.genres?.some(g => g.description.toLowerCase() === selectedGenre.toLowerCase())) {
-        return;
-      }
 
       const section = document.createElement('div');
       section.className = 'game-section';
@@ -39,11 +42,22 @@ function fetchAndDisplayGame(appId, gameName) {
       titleLink.innerHTML = `<h2>${gameName}</h2>`;
       section.appendChild(titleLink);
 
-      const screenshots = gameData.screenshots || [];
       const scroller = document.createElement('div');
       scroller.className = 'scroll-row';
 
-      screenshots.forEach(ss => {
+      (gameData.screenshots || []).forEach(ss => {
+        const imgWrapper = document.createElement('div');
+        imgWrapper.style.position = 'relative';
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerHTML = `
+          <strong>Release:</strong> ${gameData.release_date?.date || 'N/A'}<br>
+          <strong>Price:</strong> ${gameData.price_overview?.final_formatted || 'Free'}<br>
+          <strong>Genres:</strong> ${(gameData.genres || []).map(g => g.description).join(', ')}<br>
+          <strong>Desc:</strong> ${gameData.short_description || 'No description.'}
+        `;
+
         const imgLink = document.createElement('a');
         imgLink.href = `https://store.steampowered.com/app/${appId}`;
         imgLink.target = '_blank';
@@ -53,8 +67,13 @@ function fetchAndDisplayGame(appId, gameName) {
         img.src = ss.path_full;
         img.alt = gameName;
 
+        imgWrapper.appendChild(imgLink);
+        imgWrapper.appendChild(tooltip);
         imgLink.appendChild(img);
-        scroller.appendChild(imgLink);
+        imgWrapper.addEventListener('mouseenter', () => tooltip.style.display = 'block');
+        imgWrapper.addEventListener('mouseleave', () => tooltip.style.display = 'none');
+
+        scroller.appendChild(imgWrapper);
       });
 
       section.appendChild(scroller);
@@ -63,20 +82,5 @@ function fetchAndDisplayGame(appId, gameName) {
     .catch(err => console.error(`Failed to load screenshots for ${gameName}`, err));
 }
 
-// Filter by search text
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase();
-  const gameSections = document.querySelectorAll('.game-section');
-  gameSections.forEach(section => {
-    const title = section.querySelector('h2').textContent.toLowerCase();
-    section.style.display = title.includes(query) ? '' : 'none';
-  });
-});
-
-// Genre filter
-genreSelect.addEventListener('change', () => {
-  fetchSteamGames();
-});
-
 // Initial load
-fetchSteamGames();
+loadMoreGames();
