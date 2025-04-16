@@ -5,29 +5,66 @@
   <title>Newest Steam Game Previews</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --background: #1b2838;
+      --container: #2a475e;
+      --text-light: #c7d5e0;
+      --text-muted: #a4b0be;
+      --highlight: #66c0f4;
+      --scroll-thumb: #3c6382;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0 30px;
-      background: #f4f4f4;
-      color: #222;
+      padding: 0 30px 50px;
+      background: var(--background);
+      color: var(--text-light);
     }
 
     h1 {
       text-align: center;
       padding: 20px 0;
       margin-bottom: 10px;
+      color: var(--highlight);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .controls input,
+    .controls select {
+      background: var(--container);
+      color: var(--text-light);
+      border: 1px solid var(--scroll-thumb);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 1rem;
     }
 
     .game-section {
-      margin-bottom: 40px;
+      margin-bottom: 50px;
+      background: var(--container);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
     .game-section h2 {
-      margin: 10px 0;
-      font-size: 1.5rem;
-      border-bottom: 2px solid #ddd;
+      margin: 0 0 15px;
+      font-size: 1.4rem;
+      border-bottom: 2px solid rgba(255,255,255,0.1);
       padding-bottom: 5px;
+      color: var(--highlight);
+      transition: color 0.2s;
+    }
+
+    .game-section a:hover h2 {
+      color: #ffffff;
     }
 
     .scroll-row {
@@ -38,76 +75,45 @@
     }
 
     .scroll-row::-webkit-scrollbar {
-      height: 8px;
+      height: 10px;
     }
 
     .scroll-row::-webkit-scrollbar-thumb {
-      background-color: #aaa;
-      border-radius: 4px;
+      background-color: var(--scroll-thumb);
+      border-radius: 5px;
     }
 
     img {
       max-height: 180px;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease-in-out;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 8px rgba(0,0,0,0.4);
     }
 
     img:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(102, 192, 244, 0.6);
     }
   </style>
 </head>
 <body>
   <h1>Newest Steam Game Previews</h1>
+
+  <div class="controls">
+    <input id="search-input" placeholder="Search games..." />
+    <select id="genre-select">
+      <option value="">All Genres</option>
+      <option value="Action">Action</option>
+      <option value="Adventure">Adventure</option>
+      <option value="RPG">RPG</option>
+      <option value="Simulation">Simulation</option>
+      <option value="Strategy">Strategy</option>
+      <option value="Indie">Indie</option>
+    </select>
+  </div>
+
   <div id="game-container"></div>
 
-  <script>
-    const grid = document.getElementById('game-container');
-
-    fetch('/api/steamspy')
-      .then(res => res.json())
-      .then(allGames => {
-        const sorted = Object.values(allGames)
-          .filter(g => g.positive > 0 && g.owners !== '0 .. 0')
-          .sort((a, b) => b.release_date - a.release_date)
-          .slice(0, 10); // Top 10 newest
-
-        sorted.forEach(game => fetchAndDisplayGame(game.appid, game.name));
-      })
-      .catch(err => {
-        console.error("Failed to load game list:", err);
-      });
-
-    function fetchAndDisplayGame(appId, gameName) {
-      fetch(`/api/game/${appId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data[appId]?.success) return;
-          const gameData = data[appId].data;
-
-          const section = document.createElement('div');
-          section.className = 'game-section';
-
-          const title = document.createElement('h2');
-          title.textContent = gameName;
-          section.appendChild(title);
-
-          const screenshots = gameData.screenshots;
-          const scroller = document.createElement('div');
-          scroller.className = 'scroll-row';
-
-          screenshots.forEach(ss => {
-            const img = document.createElement('img');
-            img.src = ss.path_full;
-            scroller.appendChild(img);
-          });
-
-          section.appendChild(scroller);
-          grid.appendChild(section);
-        })
-        .catch(err => console.error(`Failed to load screenshots for ${gameName}`, err));
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -5,10 +5,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files (like index.html)
+// Serve static files
 app.use(express.static(path.join(__dirname)));
 
-// Proxy for SteamSpy API (bypass CORS)
+// Proxy for SteamSpy API (bypasses CORS)
 app.get('/api/steamspy', async (req, res) => {
   try {
     const response = await fetch('https://steamspy.com/api.php?request=all');
@@ -19,7 +19,7 @@ app.get('/api/steamspy', async (req, res) => {
   }
 });
 
-// Proxy for Steam Store API
+// Proxy for individual Steam app details
 app.get('/api/game/:id', async (req, res) => {
   const appId = req.params.id;
   const url = `https://store.steampowered.com/api/appdetails?appids=${appId}`;
@@ -33,7 +33,7 @@ app.get('/api/game/:id', async (req, res) => {
   }
 });
 
-// Root route
+// Serve index.html as default route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
