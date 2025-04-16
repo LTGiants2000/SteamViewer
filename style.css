@@ -140,3 +140,47 @@ img:hover {
   margin-right: auto;
   line-height: 1.4;
 }
+
+.site-header {
+  text-align: center;
+  padding: 60px 30px 30px;
+  background: linear-gradient(to bottom, #152e51 0%, #1b2e47 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.site-logo {
+  max-width: 120px;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.4rem;
+  margin: 0;
+  color: #f29c38;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: #f29c38;
+  margin: 8px 0;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.sub-description {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #c7d5e0;
+  text-align: center;
+  margin-top: 10px;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
