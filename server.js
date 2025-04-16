@@ -33,10 +33,8 @@ app.get('/api/latest-games', async (req, res) => {
 
 app.get('/api/game/:id', async (req, res) => {
   const appId = req.params.id;
-  const url = `https://store.steampowered.com/api/appdetails?appids=${appId}`;
-
   try {
-    const response = await fetch(url);
+    const response = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appId}`);
     const data = await response.json();
     res.json(data);
   } catch (err) {

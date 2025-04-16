@@ -1,4 +1,11 @@
 
+body {
+  margin: 0;
+  background: #152e51;
+  font-family: 'Open Sans', sans-serif;
+  color: #c7d5e0;
+}
+
 .site-header {
   text-align: center;
   padding: 60px 30px 30px;
@@ -32,13 +39,28 @@
 }
 
 .sub-description {
-  font-family: 'Open Sans', sans-serif;
   font-size: 0.95rem;
-  color: #c7d5e0;
   text-align: center;
   margin-top: 30px;
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.5;
+}
+
+.game-section {
+  margin: 30px;
+}
+
+.scroll-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.scroll-row img {
+  height: 180px;
+  border-radius: 8px;
+  cursor: pointer;
 }
