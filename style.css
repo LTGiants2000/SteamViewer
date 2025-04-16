@@ -1,145 +1,3 @@
-:root {
-  --background: #152e51;
-  --container: #2a475e;
-  --text-light: #c7d5e0;
-  --text-muted: #a4b0be;
-  --highlight: #66c0f4;
-  --scroll-thumb: #3c6382;
-}
-
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0 30px 50px;
-  background: var(--background);
-  color: var(--text-light);
-}
-
-h1 {
-  text-align: center;
-  padding: 20px 0;
-  margin-bottom: 10px;
-  color: var(--highlight);
-}
-
-.game-section {
-  margin-bottom: 50px;
-  background: var(--container);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  position: relative;
-}
-
-.game-section h2 {
-  margin: 0 0 15px;
-  font-size: 1.4rem;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  padding-bottom: 5px;
-  color: var(--highlight);
-  transition: color 0.2s;
-}
-
-.scroll-row {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding: 10px 0;
-}
-
-.scroll-row::-webkit-scrollbar {
-  height: 10px;
-}
-
-.scroll-row::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-thumb);
-  border-radius: 5px;
-}
-
-img {
-  max-height: 225px;
-  border-radius: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  position: relative;
-}
-
-img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(102, 192, 244, 0.6);
-}
-
-.tooltip {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  background-color: #101d2d;
-  color: #fff;
-  padding: 10px;
-  font-size: 0.85rem;
-  border-radius: 8px;
-  white-space: normal;
-  width: 260px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  display: none;
-  z-index: 10;
-}
-
-.site-header {
-  text-align: center;
-  padding: 30px 0 10px;
-  background-color: var(--container);
-  border-bottom: 2px solid rgba(255,255,255,0.05);
-  margin-bottom: 30px;
-}
-
-.site-header h1 {
-  font-size: 2.4rem;
-  margin: 0;
-  color: var(--highlight);
-}
-
-.site-header .tagline {
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  margin: 10px 0 0;
-}
-
-.site-logo {
-  max-width: 300px;
-  margin: 0 auto 10px;
-  display: block;
-}
-
-.logo-text {
-  font-size: 2.2rem;
-  margin: 10px 0 0;
-  color: #f29c38;
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
-.tagline {
-  font-size: 1rem;
-  color: #f29c38;
-  margin-top: 5px;
-  text-align: center;
-}
-
-.sub-description {
-  font-size: 0.95rem;
-  color: #c7d5e0;
-  text-align: center;
-  margin-top: 10px;
-  max-width: 750px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.4;
-}
 
 .site-header {
   text-align: center;
@@ -150,7 +8,7 @@ img:hover {
 
 .site-logo {
   max-width: 120px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -168,7 +26,7 @@ img:hover {
 .tagline {
   font-size: 1.1rem;
   color: #f29c38;
-  margin: 8px 0;
+  margin: 5px 0 0;
   font-style: italic;
   font-weight: 500;
 }
@@ -178,7 +36,7 @@ img:hover {
   font-size: 0.95rem;
   color: #c7d5e0;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 30px;
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
