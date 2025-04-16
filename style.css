@@ -57,7 +57,7 @@ h1 {
 }
 
 img {
-  max-height: 180px;
+  max-height: 225px;
   border-radius: 8px;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 0 8px rgba(0,0,0,0.4);
@@ -70,6 +70,9 @@ img:hover {
 }
 
 .tooltip {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
   position: absolute;
   bottom: 100%;
   left: 0;

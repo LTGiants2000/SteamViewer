@@ -41,6 +41,11 @@ function fetchAndDisplayGame(appId, gameName) {
       titleLink.rel = 'noopener noreferrer';
       titleLink.innerHTML = `<h2>${gameName}</h2>`;
       section.appendChild(titleLink);
+      const gameDesc = document.createElement('p');
+      gameDesc.textContent = (gameData.short_description || '').slice(0, 150) + '...';
+      gameDesc.style.marginTop = '8px';
+      gameDesc.style.color = '#ccc';
+      section.appendChild(gameDesc);
 
       const scroller = document.createElement('div');
       scroller.className = 'scroll-row';
@@ -51,11 +56,12 @@ function fetchAndDisplayGame(appId, gameName) {
 
         const tooltip = document.createElement('div');
         tooltip.className = 'tooltip';
+        const desc = (gameData.short_description || '').slice(0, 200) + (gameData.short_description?.length > 200 ? '...' : '');
         tooltip.innerHTML = `
           <strong>Release:</strong> ${gameData.release_date?.date || 'N/A'}<br>
           <strong>Price:</strong> ${gameData.price_overview?.final_formatted || 'Free'}<br>
           <strong>Genres:</strong> ${(gameData.genres || []).map(g => g.description).join(', ')}<br>
-          <strong>Desc:</strong> ${gameData.short_description || 'No description.'}
+          <strong>Desc:</strong> ${desc}
         `;
 
         const imgLink = document.createElement('a');
@@ -65,6 +71,8 @@ function fetchAndDisplayGame(appId, gameName) {
 
         const img = document.createElement('img');
         img.src = ss.path_full;
+        img.style.cursor = 'pointer';
+        img.onclick = () => window.open(ss.path_full, '_blank');
         img.alt = gameName;
 
         imgWrapper.appendChild(imgLink);
