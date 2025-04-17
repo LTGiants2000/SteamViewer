@@ -32,6 +32,7 @@ function fetchAndDisplayGame(appId, gameName) {
       const gameData = data[appId].data;
       const release = gameData.release_date?.date || "TBD";
       const description = (gameData.short_description || "No description available.").slice(0, 200) + "...";
+      const screenshots = gameData.screenshots || [];
 
       const section = document.createElement('div');
       section.className = 'game-section';
@@ -50,18 +51,26 @@ function fetchAndDisplayGame(appId, gameName) {
       desc.textContent = description;
       section.appendChild(desc);
 
-      const scroller = document.createElement('div');
-      scroller.className = 'scroll-row';
+      const mainImage = document.createElement('img');
+      mainImage.className = 'main-image';
+      mainImage.src = screenshots[0]?.path_full || '';
+      mainImage.alt = gameName;
 
-      (gameData.screenshots || []).forEach(ss => {
+      const previewContainer = document.createElement('div');
+      previewContainer.className = 'stacked-previews';
+
+      screenshots.slice(1, 4).forEach(ss => {
         const img = document.createElement('img');
-        img.src = ss.path_full;
+        img.src = ss.path_thumbnail;
         img.alt = gameName;
-        img.onclick = () => window.open(ss.path_full, '_blank');
-        scroller.appendChild(img);
+        img.onclick = () => {
+          mainImage.src = ss.path_full;
+        };
+        previewContainer.appendChild(img);
       });
 
-      section.appendChild(scroller);
+      section.appendChild(mainImage);
+      section.appendChild(previewContainer);
       grid.appendChild(section);
     })
     .catch(err => console.error(`Failed to load screenshots for ${gameName}`, err));
