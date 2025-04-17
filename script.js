@@ -1,17 +1,19 @@
 const grid = document.getElementById('game-container');
-const loadMoreBtn = document.getElementById('loadMoreBtn');
-
 let startIndex = 0;
 let loading = false;
 const pageSize = 20;
-let allGames = [];
 
-function loadGames() {
+window.addEventListener('scroll', () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
+    loadMoreGames();
+  }
+});
+
+function loadMoreGames() {
   loading = true;
   fetch(`/api/latest-games?start=${startIndex}`)
     .then(res => res.json())
     .then(games => {
-      allGames = games;
       games.forEach(game => fetchAndDisplayGame(game.appid, game.title));
       startIndex += pageSize;
       loading = false;
@@ -22,10 +24,6 @@ function loadGames() {
     });
 }
 
-loadMoreBtn.addEventListener('click', () => {
-  loadGames();
-});
-
 function fetchAndDisplayGame(appId, gameName) {
   fetch(`/api/game/${appId}`)
     .then(res => res.json())
@@ -34,7 +32,6 @@ function fetchAndDisplayGame(appId, gameName) {
       const gameData = data[appId].data;
       const release = gameData.release_date?.date || "TBD";
       const description = (gameData.short_description || "No description available.").slice(0, 200) + "...";
-      const genres = (gameData.genres || []).map(g => g.description).join(", ");
       const screenshots = gameData.screenshots || [];
 
       const section = document.createElement('div');
@@ -46,7 +43,6 @@ function fetchAndDisplayGame(appId, gameName) {
           ${gameName}
         </a>
         <span class="release-date">(${release})</span>
-        ${genres ? `<span class="genre-tag">${genres}</span>` : ''}
       `;
       section.appendChild(title);
 
@@ -55,18 +51,10 @@ function fetchAndDisplayGame(appId, gameName) {
       desc.textContent = description;
       section.appendChild(desc);
 
-      const mainImageLink = document.createElement('a');
-      mainImageLink.href = screenshots[0]?.path_full || '#';
-      mainImageLink.target = '_blank';
-      mainImageLink.rel = 'noopener noreferrer';
-
       const mainImage = document.createElement('img');
       mainImage.className = 'main-image';
       mainImage.src = screenshots[0]?.path_full || '';
       mainImage.alt = gameName;
-
-      mainImageLink.appendChild(mainImage);
-      section.appendChild(mainImageLink);
 
       const previewContainer = document.createElement('div');
       previewContainer.className = 'stacked-previews';
@@ -81,10 +69,11 @@ function fetchAndDisplayGame(appId, gameName) {
         previewContainer.appendChild(img);
       });
 
+      section.appendChild(mainImage);
       section.appendChild(previewContainer);
       grid.appendChild(section);
     })
     .catch(err => console.error(`Failed to load screenshots for ${gameName}`, err));
 }
 
-loadGames();
+loadMoreGames();
