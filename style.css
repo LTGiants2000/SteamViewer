@@ -255,3 +255,13 @@ body {
   border-radius: 4px;
   margin-left: 8px;
 }
+
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 30px auto;
+  max-width: 90%;
+}
