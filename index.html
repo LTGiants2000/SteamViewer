@@ -1,24 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Hot Steaming Drops</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <div class="logo-title">
-      <img src="logo.png" alt="Hot Steaming Drops Logo" class="logo"/>
-      <h1 class="title">
-        Hot <span class="highlight-orange">Steam</span><span class="highlight-blue">ing Drops</span>
-      </h1>
-      <h2 class="subtitle">Just Dropped, Still Warm</h2>
-    </div>
-    <main id="game-container"></main>
-    <button id="load-more">Load More</button>
-  </div>
+  <header class="site-header">
+    <img src="logo.png" alt="Hot Steaming Drops logo" class="site-logo">
+    <h1 class="logo-text">Hot <span class="steam-orange">Steam</span>ing Drops</h1>
+    <p class="tagline">Just Dropped, Still Warm</p>
+    <p class="sub-description">
+      Here you will find the latest games published to Steam in the order of release,
+      including large thumbnail-style pictures and a direct link to each Steam page.
+    </p>
+  </header>
+
+  <div id="game-container"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
