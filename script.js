@@ -59,7 +59,7 @@ function fetchAndDisplayGame(appId, gameName) {
       const previewContainer = document.createElement('div');
       previewContainer.className = 'stacked-previews';
 
-      screenshots.slice(1, 4).forEach(ss => {
+      screenshots.slice(1, 11).forEach(ss => {
         const img = document.createElement('img');
         img.src = ss.path_thumbnail;
         img.alt = gameName;
