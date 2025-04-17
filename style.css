@@ -265,3 +265,23 @@ body {
   margin: 30px auto;
   max-width: 90%;
 }
+
+.pagination-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+
+.pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: #1b2e47;
+  padding: 12px 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
