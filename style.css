@@ -285,3 +285,39 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
+
+.pagination-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  position: relative;
+  clear: both;
+}
+
+.sidebar {
+  width: 300px;
+  min-height: 100vh;
+  background-color: #1b2e47;
+  padding: 20px;
+  box-sizing: border-box;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pagination-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  clear: both;
+  position: relative;
+}

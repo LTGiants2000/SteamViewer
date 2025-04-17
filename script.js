@@ -135,10 +135,17 @@ function displayPage() {
     desc.textContent = game.description.slice(0, 200) + "...";
     section.appendChild(desc);
 
+    const mainImageLink = document.createElement('a');
+    mainImageLink.href = game.screenshots[0]?.path_full || '#';
+    mainImageLink.target = '_blank';
+    mainImageLink.rel = 'noopener noreferrer';
+
     const mainImage = document.createElement('img');
     mainImage.className = 'main-image';
     mainImage.src = game.screenshots[0]?.path_full || '';
     mainImage.alt = game.title;
+
+    mainImageLink.appendChild(mainImage);
 
     const previewContainer = document.createElement('div');
     previewContainer.className = 'stacked-previews';
@@ -153,7 +160,7 @@ function displayPage() {
       previewContainer.appendChild(img);
     });
 
-    section.appendChild(mainImage);
+    section.appendChild(mainImageLink);
     section.appendChild(previewContainer);
     grid.appendChild(section);
   });
