@@ -161,3 +161,62 @@ a:visited {
   transform: scale(1.05);
   z-index: 2;
 }
+
+body {
+  display: flex;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  background: #152e51;
+  color: #c7d5e0;
+}
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: #1b2e47;
+  padding: 20px;
+  box-sizing: border-box;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-logo {
+  max-width: 80px;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.sidebar-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #f29c38;
+  margin: 10px 0;
+}
+
+.filters {
+  margin-top: 20px;
+}
+
+.filters label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.filters select {
+  width: 100%;
+  padding: 6px;
+  font-size: 0.95rem;
+  border-radius: 5px;
+  border: none;
+  margin-top: 4px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.logo-link {
+  text-decoration: none;
+}
