@@ -64,14 +64,27 @@ function applyFilters() {
         // Date filtering logic
         const daysAgo = (now - releaseDate) / (1000 * 60 * 60 * 24);
         if (
-          (dateVal === "today" && daysAgo > 1) ||
-          (dateVal === "yesterday" && (daysAgo < 1 || daysAgo > 2)) ||
-          (dateVal === "thisweek" && daysAgo > 7) ||
-          (dateVal === "lastweek" && (daysAgo <= 7 || daysAgo > 14)) ||
-          (dateVal === "thismonth" && now.getMonth() !== releaseDate.getMonth()) ||
-          (dateVal === "lastmonth" &&
-            (releaseDate.getMonth() !== now.getMonth() - 1 &&
-            !(now.getMonth() === 0 && releaseDate.getMonth() === 11)))
+          (dateVal === "today" && (
+            releaseDate.getDate() !== now.getDate() ||
+            releaseDate.getMonth() !== now.getMonth() ||
+            releaseDate.getFullYear() !== now.getFullYear())) ||
+        (dateVal === "yesterday" && (
+            new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1).toDateString() !== releaseDate.toDateString())) ||
+        (dateVal === "thisweek" && (
+            now.getTime() - releaseDate.getTime() > 7 * 86400000)) ||
+        (dateVal === "lastweek" && (
+            now.getTime() - releaseDate.getTime() <= 7 * 86400000 ||
+            now.getTime() - releaseDate.getTime() > 14 * 86400000)) ||
+        (dateVal === "thismonth" && (
+            releaseDate.getMonth() !== now.getMonth() ||
+            releaseDate.getFullYear() !== now.getFullYear())) ||
+        (dateVal === "lastmonth" && (
+            (now.getMonth() === 0 && (releaseDate.getMonth() !== 11 || releaseDate.getFullYear() !== now.getFullYear() - 1)) ||
+            (now.getMonth() !== 0 && (
+                releaseDate.getMonth() !== now.getMonth() - 1 ||
+                releaseDate.getFullYear() !== now.getFullYear()
+            ))
+        ))
         ) {
           return;
         }
