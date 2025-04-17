@@ -30,16 +30,25 @@ function fetchAndDisplayGame(appId, gameName) {
     .then(data => {
       if (!data[appId]?.success) return;
       const gameData = data[appId].data;
+      const release = gameData.release_date?.date || "TBD";
+      const description = (gameData.short_description || "No description available.").slice(0, 200) + "...";
 
       const section = document.createElement('div');
       section.className = 'game-section';
 
-      const titleLink = document.createElement('a');
-      titleLink.href = `https://store.steampowered.com/app/${appId}`;
-      titleLink.target = '_blank';
-      titleLink.rel = 'noopener noreferrer';
-      titleLink.innerHTML = `<h2>${gameName}</h2>`;
-      section.appendChild(titleLink);
+      const title = document.createElement('h2');
+      title.innerHTML = `
+        <a href="https://store.steampowered.com/app/${appId}" target="_blank" rel="noopener noreferrer">
+          ${gameName}
+        </a>
+        <span class="release-date">(${release})</span>
+      `;
+      section.appendChild(title);
+
+      const desc = document.createElement('p');
+      desc.className = 'game-description';
+      desc.textContent = description;
+      section.appendChild(desc);
 
       const scroller = document.createElement('div');
       scroller.className = 'scroll-row';
