@@ -5,43 +5,20 @@
   <title>Hot Steaming Drops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="logo.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="sidebar">
-    <a href="/" class="logo-link">
-      <img src="logo.png" alt="Hot Steaming Drops logo" class="sidebar-logo">
-    </a>
-    <h1 class="sidebar-title">Hot <span class="steam-orange">Steam</span>ing Drops</h1>
+  <header class="site-header">
+    <img src="logo.png" alt="Hot Steaming Drops logo" class="site-logo">
+    <h1 class="logo-text">Hot <span class="steam-orange">Steam</span>ing Drops</h1>
     <p class="tagline">Just Dropped, Still Warm</p>
     <p class="sub-description">
       Here you will find the latest games published to Steam in the order of release,
       including large thumbnail-style pictures and a direct link to each Steam page.
     </p>
+  </header>
 
-    <div class="filters">
-      <h3>Filter Games</h3>
-      
-      <!-- Date filter removed -->
-          <option value="">All Time</option>
-          <option value="last7">Last 7 Days</option>
-          <option value="last30">Last 30 Days</option>
-        
-  </div>
-
-  <div id="game-container" class="main-content"></div>
-    <!-- Pagination removed -->
-      <button id="prevPage">&larr; Prev</button>
-      <span id="pageInfo">Page 1</span>
-      <button id="nextPage">Next &rarr;</button>
-      <label>
-        Games per page:
-        <select id="pageSizeSelector">
-          <option value="10" selected>10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        
+  <div id="game-container"></div>
 
   <script src="script.js"></script>
 </body>
