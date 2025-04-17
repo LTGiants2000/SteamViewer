@@ -96,3 +96,32 @@ a:visited {
   margin: 8px 0 15px;
   max-width: 800px;
 }
+
+.scroll-row {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.scroll-row::-webkit-scrollbar {
+  height: 10px;
+}
+.scroll-row::-webkit-scrollbar-thumb {
+  background: #3c6382;
+  border-radius: 5px;
+}
+
+.scroll-row img {
+  height: 240px; /* increased size */
+  border-radius: 8px;
+  cursor: pointer;
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.scroll-row img:hover {
+  transform: scale(1.05);
+}
