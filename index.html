@@ -23,24 +23,15 @@
     <div class="filters">
       <h3>Filter Games</h3>
       <label>
-        Genre:
-        <select id="genreFilter">
-          <option value="">All</option>
-          <option value="Action">Action</option>
-          <option value="Indie">Indie</option>
-          <option value="RPG">RPG</option>
-          <option value="Simulation">Simulation</option>
-          <option value="Strategy">Strategy</option>
-        </select>
-      </label>
-      <label>
-        Tag:
-        <select id="tagFilter">
-          <option value="">All</option>
-          <option value="Early Access">Early Access</option>
-          <option value="Multiplayer">Multiplayer</option>
-          <option value="Singleplayer">Singleplayer</option>
-          <option value="Free to Play">Free to Play</option>
+        Release Date:
+        <select id="dateFilter">
+          <option value="">All Time</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="thisweek">This Week</option>
+          <option value="lastweek">Last Week</option>
+          <option value="thismonth">This Month</option>
+          <option value="lastmonth">Last Month</option>
         </select>
       </label>
       <label>
@@ -55,6 +46,21 @@
   </div>
 
   <div id="game-container" class="main-content"></div>
+    <div class="pagination-controls">
+      <button id="prevPage">&larr; Prev</button>
+      <span id="pageInfo">Page 1</span>
+      <button id="nextPage">Next &rarr;</button>
+      <label>
+        Games per page:
+        <select id="pageSizeSelector">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15" selected>15</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </label>
+    </div>
 
   <script src="script.js"></script>
 </body>

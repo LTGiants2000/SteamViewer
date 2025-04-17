@@ -1,44 +1,55 @@
 const grid = document.getElementById('game-container');
-let startIndex = 0;
-let loading = false;
-const pageSize = 20;
-let allGames = [];
-
-const genreFilter = document.getElementById('genreFilter');
-const tagFilter = document.getElementById('tagFilter');
 const dateFilter = document.getElementById('dateFilter');
+const pageSizeSelector = document.getElementById('pageSizeSelector');
+const prevPageBtn = document.getElementById('prevPage');
+const nextPageBtn = document.getElementById('nextPage');
+const pageInfo = document.getElementById('pageInfo');
 
-window.addEventListener('scroll', () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
-    loadMoreGames();
+let allGames = [];
+let gameDetailsCache = {};
+let currentPage = 1;
+let pageSize = parseInt(pageSizeSelector.value);
+
+dateFilter.addEventListener('change', applyFilters);
+pageSizeSelector.addEventListener('change', () => {
+  pageSize = parseInt(pageSizeSelector.value);
+  currentPage = 1;
+  applyFilters();
+});
+prevPageBtn.addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    displayPage();
+  }
+});
+nextPageBtn.addEventListener('click', () => {
+  const totalPages = Math.ceil(filteredGames.length / pageSize);
+  if (currentPage < totalPages) {
+    currentPage++;
+    displayPage();
   }
 });
 
-genreFilter.addEventListener('change', applyFilters);
-tagFilter.addEventListener('change', applyFilters);
-dateFilter.addEventListener('change', applyFilters);
+let filteredGames = [];
 
-function loadMoreGames() {
-  loading = true;
-  fetch(`/api/latest-games?start=${startIndex}`)
-    .then(res => res.json())
-    .then(games => {
-      allGames = allGames.concat(games);
-      startIndex += pageSize;
+function fetchAllGames() {
+  const loadBatches = [0, 15, 30, 45, 60];
+  const fetches = loadBatches.map(start =>
+    fetch(`/api/latest-games?start=${start}`).then(res => res.json())
+  );
+  Promise.all(fetches)
+    .then(results => {
+      allGames = results.flat();
       applyFilters();
-      loading = false;
     })
-    .catch(err => {
-      console.error("Failed to load game list:", err);
-      loading = false;
-    });
+    .catch(err => console.error("Failed to load game list:", err));
 }
 
 function applyFilters() {
-  const genreVal = genreFilter.value;
-  const tagVal = tagFilter.value;
   const dateVal = dateFilter.value;
-  grid.innerHTML = '';
+  filteredGames = [];
+
+  const now = new Date();
 
   allGames.forEach(game => {
     fetch(`/api/game/${game.appid}`)
@@ -47,62 +58,92 @@ function applyFilters() {
         if (!data[game.appid]?.success) return;
         const gameData = data[game.appid].data;
         const releaseDateStr = gameData.release_date?.date || '';
-        const shortDesc = (gameData.short_description || "No description available.").slice(0, 200) + "...";
-        const screenshots = gameData.screenshots || [];
-        const genres = (gameData.genres || []).map(g => g.description);
-        const tags = (gameData.categories || []).map(c => c.description);
+        const releaseDate = new Date(releaseDateStr);
+        if (isNaN(releaseDate)) return;
 
-        // Filter checks
-        if (genreVal && !genres.includes(genreVal)) return;
-        if (tagVal && !tags.includes(tagVal)) return;
-        if (dateVal) {
-          const releaseDate = new Date(releaseDateStr);
-          const today = new Date();
-          const daysDiff = Math.floor((today - releaseDate) / (1000 * 60 * 60 * 24));
-          if (dateVal === 'last7' && daysDiff > 7) return;
-          if (dateVal === 'last30' && daysDiff > 30) return;
+        // Date filtering logic
+        const daysAgo = (now - releaseDate) / (1000 * 60 * 60 * 24);
+        if (
+          (dateVal === "today" && daysAgo > 1) ||
+          (dateVal === "yesterday" && (daysAgo < 1 || daysAgo > 2)) ||
+          (dateVal === "thisweek" && daysAgo > 7) ||
+          (dateVal === "lastweek" && (daysAgo <= 7 || daysAgo > 14)) ||
+          (dateVal === "thismonth" && now.getMonth() !== releaseDate.getMonth()) ||
+          (dateVal === "lastmonth" &&
+            (releaseDate.getMonth() !== now.getMonth() - 1 &&
+            !(now.getMonth() === 0 && releaseDate.getMonth() === 11)))
+        ) {
+          return;
         }
 
-        const section = document.createElement('div');
-        section.className = 'game-section';
+        gameDetailsCache[game.appid] = {
+          title: game.title,
+          appid: game.appid,
+          releaseDate: releaseDateStr,
+          description: gameData.short_description || '',
+          screenshots: gameData.screenshots || [],
+          genres: (gameData.genres || []).map(g => g.description).join(", ")
+        };
 
-        const title = document.createElement('h2');
-        title.innerHTML = `
-          <a href="https://store.steampowered.com/app/${game.appid}" target="_blank" rel="noopener noreferrer">
-            ${game.title}
-          </a>
-          <span class="release-date">(${releaseDateStr})</span>
-        `;
-        section.appendChild(title);
-
-        const desc = document.createElement('p');
-        desc.className = 'game-description';
-        desc.textContent = shortDesc;
-        section.appendChild(desc);
-
-        const mainImage = document.createElement('img');
-        mainImage.className = 'main-image';
-        mainImage.src = screenshots[0]?.path_full || '';
-        mainImage.alt = game.title;
-
-        const previewContainer = document.createElement('div');
-        previewContainer.className = 'stacked-previews';
-
-        screenshots.slice(1, 11).forEach(ss => {
-          const img = document.createElement('img');
-          img.src = ss.path_thumbnail;
-          img.alt = game.title;
-          img.onclick = () => {
-            mainImage.src = ss.path_full;
-          };
-          previewContainer.appendChild(img);
-        });
-
-        section.appendChild(mainImage);
-        section.appendChild(previewContainer);
-        grid.appendChild(section);
+        filteredGames.push(game.appid);
+        if (filteredGames.length <= pageSize * currentPage) {
+          displayPage();
+        }
       });
   });
 }
 
-loadMoreGames();
+function displayPage() {
+  grid.innerHTML = "";
+  const start = (currentPage - 1) * pageSize;
+  const end = start + pageSize;
+  const gameIds = filteredGames.slice(start, end);
+  pageInfo.textContent = `Page ${currentPage}`;
+
+  gameIds.forEach(appid => {
+    const game = gameDetailsCache[appid];
+    if (!game) return;
+
+    const section = document.createElement('div');
+    section.className = 'game-section';
+
+    const title = document.createElement('h2');
+    title.innerHTML = `
+      <a href="https://store.steampowered.com/app/${appid}" target="_blank" rel="noopener noreferrer">
+        ${game.title}
+      </a>
+      <span class="release-date">(${game.releaseDate})</span>
+      ${game.genres ? `<span class="genre-tag">${game.genres}</span>` : ""}
+    `;
+    section.appendChild(title);
+
+    const desc = document.createElement('p');
+    desc.className = 'game-description';
+    desc.textContent = game.description.slice(0, 200) + "...";
+    section.appendChild(desc);
+
+    const mainImage = document.createElement('img');
+    mainImage.className = 'main-image';
+    mainImage.src = game.screenshots[0]?.path_full || '';
+    mainImage.alt = game.title;
+
+    const previewContainer = document.createElement('div');
+    previewContainer.className = 'stacked-previews';
+
+    game.screenshots.slice(1, 11).forEach(ss => {
+      const img = document.createElement('img');
+      img.src = ss.path_thumbnail;
+      img.alt = game.title;
+      img.onclick = () => {
+        mainImage.src = ss.path_full;
+      };
+      previewContainer.appendChild(img);
+    });
+
+    section.appendChild(mainImage);
+    section.appendChild(previewContainer);
+    grid.appendChild(section);
+  });
+}
+
+fetchAllGames();
